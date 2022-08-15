@@ -22,7 +22,13 @@ ccache -p # print the config
 ccache -s # print the stats before reusing
 ccache -z # zero the stats
 
-go=$(which go)
+go=$(type -P go) # `which` isn't available on fedora:36 docker image
+
+# oss build doesn't succeed with python3.10, which is the system-wide python ver of fedora:36
+# we use python3.9 explicitly for the build
+virtualenv --python="/usr/bin/python3.9" venv
+. venv/bin/activate
+pip3 install jinja2
 
 # Change Debug via  -DCMAKE_BUILD_TYPE=Debug
 cmake -DCMAKE_BUILD_TYPE=Release \
@@ -31,7 +37,7 @@ cmake -DCMAKE_BUILD_TYPE=Release \
   -GNinja \
   -DCMAKE_C_COMPILER=$CC \
   -DCMAKE_CXX_COMPILER=$CXX \
-  -DCMAKE_GO_BINARY=$(go) \
+  -DCMAKE_GO_BINARY=$go \
   -DDEPOT_TOOLS_DIR=$DEPOT_TOOLS_DIR \
   "$@"
 

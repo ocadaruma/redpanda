@@ -25,7 +25,7 @@ set(PKG_CONFIG_PATH_LIST
   ${REDPANDA_DEPS_INSTALL_DIR}/lib/pkgconfig
   )
 
-list(APPEND BASE_CXX_FLAGS_LIST -fPIC)
+list(APPEND BASE_CXX_FLAGS_LIST -fPIC -Wno-enum-constexpr-conversion)
 list(APPEND BASE_C_FLAGS_LIST -fPIC)
 if ("${CMAKE_BUILD_TYPE}" MATCHES "Debug")
     list(APPEND BASE_CXX_FLAGS_LIST
